@@ -1560,7 +1560,7 @@ NavigationKeys = {
 
 ArrowKeys = {
     [1] = KeyColumn({
-        [1] = KeyRow(1, { [1] = nil,         [2] = Key("Up"),   [3] = nil }),
+        [1] = KeyRow(1, { [1] = Key("Up") }),
         [2] = KeyRow(1, { [1] = Key("Left"), [2] = Key("Down"), [3] = Key("Right") })
     })
 }
