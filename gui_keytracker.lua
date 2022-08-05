@@ -318,7 +318,7 @@ local function KeyPad(keyColumns, keySpacing, baseKeyWidth, baseKeyHeight)
         scalableKeySpacing,
         scalableKeySpacing,
         {},
-        5,
+        MasterFramework:Dimension(5),
         false
     )
 
