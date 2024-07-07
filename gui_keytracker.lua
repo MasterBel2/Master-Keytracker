@@ -60,7 +60,8 @@ local graphData = {
     maxY = 1,
     minX = 0,
     maxX = 1,
-    lines = { 
+    discrete = true,
+    lines = {
         { 
             color = { r = 0, g = 0, b = 1, a = 1 }, 
             vertices = myKeypressData 
@@ -214,10 +215,7 @@ function widget:Update(dt)
 
     if newTotalKeypresses ~= totalKeysPressed then
         table.insert(myKeypressData, { elapsedTime, newTotalKeypresses })
-        table.insert(myKeypressData, { elapsedTime, newTotalKeypresses })
         totalKeysPressed = newTotalKeypresses
-    else
-        myKeypressData[#myKeypressData] = { elapsedTime, newTotalKeypresses }
     end
     graphData.maxX = elapsedTime
     graphData.maxY = totalKeysPressed
