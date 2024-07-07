@@ -157,20 +157,30 @@ function widget:Update(dt)
 
     local keys = {}
 
-    local pressedKeys = Spring_GetPressedKeys()
+    local pressedScans = Spring.GetPressedScans()
+    for codeOrName, isPressed in pairs(pressedScans) do
+        if isPressed and type(codeOrName) == "string" then
+            table.insert(keys, codeOrName .. "(" .. Spring.GetKeyCode(Spring.GetKeyFromScanSymbol(codeOrName)) .. ")")
+            local keyCode = Spring.GetKeyCode(Spring.GetKeyFromScanSymbol(codeOrName))
 
-    local newTotalKeypresses = totalKeysPressed
+            pressedUIKeys[keyCode] = uiKeys[keyCode]
 
-    for codeOrName, isPressed in pairs(pressedKeys) do
-        if isPressed and type(codeOrName) == "number" then
-            table.insert(keys, tostring(codeOrName))
-            pressedUIKeys[codeOrName] = uiKeys[codeOrName]
-
-            heatmap[codeOrName] = (heatmap[codeOrName] or 0) + dt
-            maxPressedtime = math.max(maxPressedtime, heatmap[codeOrName])
+            heatmap[keyCode] = (heatmap[keyCode] or 0) + dt
+            maxPressedtime = math.max(maxPressedtime, heatmap[keyCode])
         end
     end
 
+    -- local pressedKeys = Spring_GetPressedKeys()
+
+    -- for codeOrName, isPressed in pairs(pressedKeys) do
+    --     if isPressed and type(codeOrName) == "number" then
+    --         table.insert(keys, tostring(codeOrName))
+    --         pressedUIKeys[codeOrName] = uiKeys[codeOrName]
+
+    --         heatmap[codeOrName] = (heatmap[codeOrName] or 0) + dt
+    --         maxPressedtime = math.max(maxPressedtime, heatmap[codeOrName])
+    --     end
+    -- end
     local pressedModifiers = modifiersToBitfield(
         pressedUIKeys[0x134],
         pressedUIKeys[0x132],
