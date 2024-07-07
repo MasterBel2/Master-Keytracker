@@ -1,12 +1,13 @@
 function widget:GetInfo()
 	return {
-	name      = "Key Tracker", --version 4.1
-	desc      = "Displays pressed keys on the screen",
-	author    = "MasterBel2",
-	date      = "January 2022",
-	license   = "GNU GPL, v2",
-	layer     = 9999999999999999999, -- must be in front
-	enabled   = true, --enabled by default
+        name      = "Key Tracker",
+        desc      = "Displays pressed keys on the screen",
+        author    = "MasterBel2",
+        date      = "January 2022",
+        license   = "GNU GPL, v2",
+        layer     = math.huge, -- must be in front
+        enabled   = true, --enabled by default
+        handler   = true
 	}
 end
 
@@ -194,7 +195,7 @@ function widget:Update(dt)
             newTotalKeypresses = newTotalKeypresses + 1
             uiKey:SetPressed(true)
 
-            if not (widgetHandler.textOwnerkey == 0x130 or key == 0x132 or key == 0x134 or key == 0x136) then
+            if not (widgetHandler.textOwner or key == 0x130 or key == 0x132 or key == 0x134 or key == 0x136) then
                 local perModifier = modifiedHeatmap[pressedModifiers] or {}
                 perModifier[key] = (perModifier[key] or 0) + 1
                 modifiedHeatmap[pressedModifiers] = perModifier
