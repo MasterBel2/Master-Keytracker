@@ -130,6 +130,7 @@ function widget:Initialize()
     )
 
     if MasterFramework:GetDebugMode() then
+        trackerKey = MasterFramework:InsertElement(
             MasterFramework:FrameOfReference(
                 0.9,
                 0.9,
