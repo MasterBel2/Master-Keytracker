@@ -172,6 +172,8 @@ function widget:Update(dt)
 
     -- local pressedKeys = Spring_GetPressedKeys()
 
+    local newTotalKeypresses = totalKeysPressed
+
     -- for codeOrName, isPressed in pairs(pressedKeys) do
     --     if isPressed and type(codeOrName) == "number" then
     --         table.insert(keys, tostring(codeOrName))
