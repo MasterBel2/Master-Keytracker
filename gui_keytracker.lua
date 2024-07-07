@@ -36,6 +36,7 @@ local uiKeys = {}
 local pressedUIKeys = {}
 
 local heatmap = {}
+local modifiedHeatmap = {}
 local showHeatmap = false
 local maxPressedtime = 0
 
@@ -98,7 +99,8 @@ function widget:Initialize()
         return
     end
 
-    widgetHandler:AddAction(
+    widgetHandler.actionHandler:AddAction(
+        self,
         "master_keytracker_heatmap_visible", 
         function(_, _, words)
             showHeatmap = (words[1] == "1")
@@ -221,16 +223,35 @@ function widget:Update(dt)
     graphData.maxY = totalKeysPressed
 end
 
+local function writeHeatmap()
+    local file = io.open("LuaUI/Config/heatmap.json", "w")
+    file:write(Json.encode(modifiedHeatmap))
+    file:close()
+end
+
 function widget:GameOver()
+    if not (Spring.GetSpectatingState() or Spring.GetGameFrame() < 30 * 60 * 10) then
+        Spring.Echo("Writing heatmap!")
+        writeHeatmap()
+    else
+        Spring.Echo("Not writing heatmap!", Spring.GetSpectatingState(), Spring.GetGameFrame())
+    end
+
     Spring.Echo("Game over!")
     showHeatmap = true
 end
 
-function widget:Shutdown() 
+function widget:Shutdown()
+    if not (Spring.GetSpectatingState() or Spring.GetGameFrame() < 30 * 60 * 15 or Spring.IsGameOver()) then
+        writeHeatmap()
+    else
+        Spring.Echo("Not writing heatmap!", Spring.GetSpectatingState(), Spring.GetGameFrame(), Spring.IsGameOver())
+    end
+
     MasterFramework:RemoveElement(trackerKey)
     MasterFramework:RemoveElement(keyboardKey)
 
-    widgetHandler:RemoveAction("master_keytracker_heatmap_visible", "t")
+    widgetHandler.actionHandler:RemoveAction(self, "master_keytracker_heatmap_visible", "t")
 end
 
 function widget:MasterStatsCategories()
