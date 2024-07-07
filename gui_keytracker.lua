@@ -73,8 +73,7 @@ local graphData = {
 -- Helpers
 ------------------------------------------------------------------------------------------------------------
 
--- Assembles a string by concatenating all string in an array, inserting the provided separator in between.
-local joinStrings = table.joinStrings
+local table_concat = table.concat
 
 function string:remove(i) -- incomplete consideration of edge cases, but due to our use here we won't flesh that out yet. (Should this be public then?)
     if #self > i then 
@@ -200,7 +199,7 @@ function widget:Update(dt)
         end
     end
 
-    label:SetString(joinStrings(keys, " + "))
+    -- label:SetString(table_concat(keys, " + "))
 
     if showHeatmap then
         for code, time in pairs(heatmap) do
