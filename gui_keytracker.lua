@@ -15,7 +15,7 @@ end
 ------------------------------------------------------------------------------------------------------------
 
 local MasterFramework
-local requiredFrameworkVersion = 14
+local requiredFrameworkVersion = "Dev"
 
 local Spring_GetPressedKeys = Spring.GetPressedKeys
 
@@ -92,7 +92,7 @@ end
 function widget:Initialize()
     if WG.MasterStats then WG.MasterStats:Refresh() end
 
-    MasterFramework = WG.MasterFramework[requiredFrameworkVersion]
+    MasterFramework = WG["MasterFramework " .. requiredFrameworkVersion]
     if not MasterFramework then
         Spring.Echo("[Key Tracker] Error: MasterFramework " .. requiredFrameworkVersion .. " not found! Removing self.")
         widgetHandler:RemoveWidget(self)
@@ -122,15 +122,13 @@ function widget:Initialize()
     local keyboard = WG.MasterGUIKeyboard()
     uiKeys = keyboard.uiKeys
 
-
-    keyboardKey = MasterFramework:InsertElement(
-        keyboardRasterizer,
+    keyboardKey, keyboardElement = MasterFramework:InsertElement(
+        MasterFramework:FrameOfReference(0.5, 0, MasterFramework:PrimaryFrame(keyboard)),
         "Key Tracker Keyboard",
         MasterFramework.layerRequest.anywhere()
     )
 
-    if MasterFramework.debug then
-        trackerKey = MasterFramework:InsertElement(
+    if MasterFramework:GetDebugMode() then
             MasterFramework:FrameOfReference(
                 0.9,
                 0.9,
@@ -183,7 +181,6 @@ function widget:Update(dt)
         if not wasPressed[key] then
             newTotalKeypresses = newTotalKeypresses + 1
             uiKey:SetPressed(true)
-            keyboardRasterizer.invalidated = true
 
             if not (widgetHandler.textOwnerkey == 0x130 or key == 0x132 or key == 0x134 or key == 0x136) then
                 local perModifier = modifiedHeatmap[pressedModifiers] or {}
@@ -195,7 +192,6 @@ function widget:Update(dt)
     for key, uiKey in pairs(wasPressed) do
         if not pressedUIKeys[key] then
             uiKey:SetPressed(false)
-            keyboardRasterizer.invalidated = true
         end
     end
 
@@ -205,7 +201,6 @@ function widget:Update(dt)
         for code, time in pairs(heatmap) do
             if uiKeys[code] then
                 uiKeys[code]:SetBackgroundColor({ r = time / maxPressedtime, g = 1 - (time / maxPressedtime), b = 0 })
-                keyboardRasterizer.invalidated = true
             else
                 -- For SDL1, Code 310 (Left Meta) triggers this pathng
             end
