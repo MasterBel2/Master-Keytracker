@@ -57,10 +57,6 @@ local myKeypressData = {
 }
 
 local graphData = {
-    minY = 0,
-    maxY = 1,
-    minX = 0,
-    maxX = 1,
     discrete = true,
     lines = {
         { 
@@ -225,8 +221,6 @@ function widget:Update(dt)
         table.insert(myKeypressData, { elapsedTime, newTotalKeypresses })
         totalKeysPressed = newTotalKeypresses
     end
-    graphData.maxX = elapsedTime
-    graphData.maxY = totalKeysPressed
 end
 
 local function writeHeatmap()
